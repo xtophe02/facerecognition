@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: facerecognition-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: facerecognition
+  template:
+    metadata:
+      labels:
+        component: facerecognition
+    spec:
+      containers:
+        - name: facerecognition
+          imagePullPolicy: Never
+          image: xtophe02/facerecognition
+          ports:
+            - containerPort: 3003
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: facerecognition-service
+spec:
+  type: NodePort
+  selector:
+    component: facerecognition
+  ports:
+    - port: 3003
+      targetPort: 3003
+      nodePort: 31515
